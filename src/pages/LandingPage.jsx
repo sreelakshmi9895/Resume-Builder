@@ -1,6 +1,7 @@
 import React from 'react'
 import { BiAlignJustify } from 'react-icons/bi'
 import { Link } from 'react-router-dom'
+
 function LandingPage() {
   return (
     <>
