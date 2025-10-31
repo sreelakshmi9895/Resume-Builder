@@ -6,8 +6,8 @@ import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
-import { FaXmark } from "react-icons/fa6";
 import { useState } from 'react';
+import { FaXmark } from "react-icons/fa6";
 
 const steps = ['Basic Informations', 'Contact Details', 'Educational Details','Work Experience','Skills and Certifications','Review and Submit'];
 
@@ -18,13 +18,13 @@ function UserInput() {
   // create state for store resume details
   const [resumeDetails,setResumeDetails] = useState({
     username:"",
-    jobTitile:"",
+    jobTitle:"",
     location:"",
     email:"",
     mobile:"",
     github:"",
     linkedin:"",
-    porfolio:"",
+    portfolio:"",
     course:"",
     college:"",
     university:"",
@@ -33,10 +33,13 @@ function UserInput() {
     company:"",
     cLocation:"",
     duration:"",
-    userSkilss:[],
+    userSkills:[],
     summary:""
   })
+const skillRef = React.useRef()
 console.log(resumeDetails);
+
+
 
   const isStepOptional = (step) => {
     return step === 1;
@@ -79,6 +82,18 @@ console.log(resumeDetails);
   const handleReset = () => {
     setActiveStep(0);
   };
+  const addSkill = (skill)=>{
+    if(resumeDetails.userSkills.includes(skill)){
+      alert("The gien skill already added,please add another!!!")
+    }else{
+      setResumeDetails({...resumeDetails,userSkills:[...resumeDetails.userSkills,skill]})
+      skillRef.current.value = ""
+    }
+  }
+
+  const removeSkill = (skill)=>{
+    setResumeDetails({...resumeDetails,userSkills:resumeDetails.userSkills.filter(item=>item!=skill)})
+  }
 
   const renderSteps = (stepCount)=>{
       switch(stepCount){
@@ -111,7 +126,7 @@ console.log(resumeDetails);
                     <TextField value={resumeDetails.course} onChange={e=>setResumeDetails({...resumeDetails,course:e.target.value})} id="standard-basic-course" label="Course Name" variant="standard" />
                     <TextField value={resumeDetails.college} onChange={e=>setResumeDetails({...resumeDetails,college:e.target.value})} id="standard-basic-college" label="College Name" variant="standard" />
                     <TextField value={resumeDetails.university} onChange={e=>setResumeDetails({...resumeDetails,university:e.target.value})} id="standard-basic-university" label="University" variant="standard" />
-                    <TextField value={resumeDetails.passoutyear} onChange={e=>setResumeDetails({...resumeDetails,passoutyear:e.target.value})} id="standard-basic-passoutyear" label="Year Of Passout" variant="standard" />
+                    <TextField value={resumeDetails.passoutYear} onChange={e=>setResumeDetails({...resumeDetails,passoutyear:e.target.value})} id="standard-basic-passoutyear" label="Year Of Passout" variant="standard" />
                 </div>
             </div>
         )
@@ -130,20 +145,27 @@ console.log(resumeDetails);
             <div>
                 <h3>Skills</h3>
                 <div className='d-flex align-items-center justify-content-between p-3 w-100'>
-                  <input placeholder='Add Skill' type="text" className="form-control" />
-                  <Button variant='text'>ADD</Button>
+                  <input ref={skillRef}  placeholder='Add Skill' type="text" className="form-control" />
+                  <Button onClick={()=>addSkill(skillRef.current.value)} variant='text'>ADD</Button>
                   </div>
                   <h5>Suggestions</h5>
                   <div className='d-flex flex-wrap  my-3'>
                     {
                       skillSuggestionArray.map((item,index)=>(
-                      <Button key={index} variant="outlined" className='m-2 fs-7'>{item}</Button>
+                      <Button onClick={()=>addSkill(item)} key={index} variant="outlined" className='m-2 fs-7'>{item}</Button>
                       ))
                     }
                 </div>
-                <h5>Added Skills:</h5>
+                <h5>Add Skills:</h5>
                 <div className='d-flex flex-wrap  my-3'>
-                    <Button onChange={e=>setResumeDetails({...resumeDetails,summary:e.target.value})} variant="contained" className='m-1'>NODE JS <FaXmark className='ms-3 cursor-pointer' /></Button>
+                   { 
+                   resumeDetails.userSkills.length>0?
+                   resumeDetails.userSkills?.map((skill,index)=>(
+                   <Button key={index} variant="contained" className='m-1'>{skill}<FaXmark onClick={()=>removeSkill(skill)} className='ms-2' /></Button>
+                   ))
+                    :
+                    <p className='fw-bolder'>No Skills are added yet!!!</p>
+                    }
                 </div>
             </div>
         )
