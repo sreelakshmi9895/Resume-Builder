@@ -8,34 +8,36 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import { useState } from 'react';
 import { FaXmark } from "react-icons/fa6";
+import { addNewResumeAPI } from '../services/allAPI';
 
 const steps = ['Basic Informations', 'Contact Details', 'Educational Details','Work Experience','Skills and Certifications','Review and Submit'];
 
-function UserInput() {
+function UserInput({resumeDetails,setResumeDetails}) {
   const skillSuggestionArray = ['NODE JS','REACT','MONGODB','EXPRESS JS','ANGULAR','LEADERSHIP','COMMUNICATION','COACHING','POWER BI','MS EXCEL']
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
-  // create state for store resume details
-  const [resumeDetails,setResumeDetails] = useState({
-    username:"",
-    jobTitle:"",
-    location:"",
-    email:"",
-    mobile:"",
-    github:"",
-    linkedin:"",
-    portfolio:"",
-    course:"",
-    college:"",
-    university:"",
-    passoutYear:"",
-    jobType:"",
-    company:"",
-    cLocation:"",
-    duration:"",
-    userSkills:[],
-    summary:""
-  })
+  //  resume details - get from props
+  // const [resumeDetails,setResumeDetails] = useState({
+  //   username:"",
+  //   jobTitle:"",
+  //   location:"",
+  //   email:"",
+  //   mobile:"",
+  //   github:"",
+  //   linkedin:"",
+  //   portfolio:"",
+  //   course:"",
+  //   college:"",
+  //   university:"",
+  //   passoutYear:"",
+  //   jobType:"",
+  //   company:"",
+  //   cLocation:"",
+  //   duration:"",
+  //   userSkills:[],
+  //   summary:""
+  // })
+  
 const skillRef = React.useRef()
 console.log(resumeDetails);
 
@@ -181,6 +183,25 @@ console.log(resumeDetails);
       }
   }
 
+const handleResume = async ()=>{
+  const {username,jobTitile,location} = resumeDetails
+  if(!username && !jobTitile && !location){
+    alert("please fill the form completely...")
+  }
+  else{
+    console.log("Api call");
+    try{
+      const result = await addNewResumeAPI(resumeDetails)
+      console.log(result);
+      
+    }catch(error){
+      console.log(error); 
+    }
+    // success redirect view page
+    
+  }
+}
+
   return (
     <Box sx={{ width: '100%' }}>
       <Stepper activeStep={activeStep}>
@@ -234,9 +255,14 @@ console.log(resumeDetails);
                 Skip
               </Button>
             )}
-            <Button onClick={handleNext}>
-              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-            </Button>
+            {activeStep === steps.length - 1 ? 
+            <Button onClick={handleAddResume}>FINISH</Button> 
+            : 
+            <Button onClick={handleNext}>NEXT</Button>
+            }
+            
+            
+            
           </Box>
         </React.Fragment>
       )}
