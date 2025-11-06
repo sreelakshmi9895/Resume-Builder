@@ -9,6 +9,7 @@ import TextField from '@mui/material/TextField';
 import { useState } from 'react';
 import { FaXmark } from "react-icons/fa6";
 import { addNewResumeAPI } from '../services/allAPI';
+import { useNavigate } from 'react-router-dom';
 
 const steps = ['Basic Informations', 'Contact Details', 'Educational Details','Work Experience','Skills and Certifications','Review and Submit'];
 
@@ -39,6 +40,8 @@ function UserInput({resumeDetails,setResumeDetails}) {
   // })
   
 const skillRef = React.useRef()
+// to navigate
+const navigate = useNavigate()
 console.log(resumeDetails);
 
 
@@ -104,7 +107,7 @@ console.log(resumeDetails);
                 <h3>Personal Details</h3>
                 <div className="d-flex row p-3">
                 <TextField value={resumeDetails.username} onChange={e=>setResumeDetails({...resumeDetails,username:e.target.value})} id="standard-basic-name" label="Full Name" variant="standard" />
-                <TextField value={resumeDetails.jobTitle} onChange={e=>setResumeDetails({...resumeDetails,jobTitile:e.target.value})} id="standard-basic-job" label="Job Title" variant="standard" />
+                <TextField value={resumeDetails.jobTitle} onChange={e=>setResumeDetails({...resumeDetails,jobTitle:e.target.value})} id="standard-basic-job" label="Job Title" variant="standard" />
                 <TextField value={resumeDetails.location} onChange={e=>setResumeDetails({...resumeDetails,location:e.target.value})} id="standard-basic-location" label="Location" variant="standard" />
                 </div>
             </div>
@@ -128,7 +131,7 @@ console.log(resumeDetails);
                     <TextField value={resumeDetails.course} onChange={e=>setResumeDetails({...resumeDetails,course:e.target.value})} id="standard-basic-course" label="Course Name" variant="standard" />
                     <TextField value={resumeDetails.college} onChange={e=>setResumeDetails({...resumeDetails,college:e.target.value})} id="standard-basic-college" label="College Name" variant="standard" />
                     <TextField value={resumeDetails.university} onChange={e=>setResumeDetails({...resumeDetails,university:e.target.value})} id="standard-basic-university" label="University" variant="standard" />
-                    <TextField value={resumeDetails.passoutYear} onChange={e=>setResumeDetails({...resumeDetails,passoutyear:e.target.value})} id="standard-basic-passoutyear" label="Year Of Passout" variant="standard" />
+                    <TextField value={resumeDetails.passoutYear} onChange={e=>setResumeDetails({...resumeDetails,passoutYear:e.target.value})} id="standard-basic-passoutyear" label="Year Of Passout" variant="standard" />
                 </div>
             </div>
         )
@@ -193,6 +196,12 @@ const handleResume = async ()=>{
     try{
       const result = await addNewResumeAPI(resumeDetails)
       console.log(result);
+      if(result.status==201){
+        alert("Resume added successfully!!!")
+        const {id} = result.data
+        // success redirect to view page
+        navigate (`/resume/${id}/view`)
+      }
       
     }catch(error){
       console.log(error); 
@@ -256,7 +265,7 @@ const handleResume = async ()=>{
               </Button>
             )}
             {activeStep === steps.length - 1 ? 
-            <Button onClick={handleAddResume}>FINISH</Button> 
+            <Button onClick={handleResume}>FINISH</Button> 
             : 
             <Button onClick={handleNext}>NEXT</Button>
             }
