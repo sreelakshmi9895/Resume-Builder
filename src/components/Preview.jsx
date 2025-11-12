@@ -5,7 +5,7 @@ function Preview({resumeDetails}) {
   return (
     <div style={{margin:'70px'}} className='p-5 w-100 shadow rounded text-center'>
       <h2>{resumeDetails?.username}</h2>
-      <h5>{resumeDetails?.JobTitle}</h5>
+      <h5>{resumeDetails?.jobTitle}</h5>
       <h6><span className='mx-2'>{resumeDetails?.location}</span>|<span className='mx-2'>{resumeDetails?.email}</span>|<span className='mx-2'>{resumeDetails?.mobile}</span></h6>
       <p className='my-3'>
         <a href="{resumeDetails?.github}" target='_blank'>GITHUB</a> |  
