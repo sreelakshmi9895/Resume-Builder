@@ -1,5 +1,5 @@
-import {commonAPI} from "./commonAPI";
-import {ServerURL} from "./ServerURL";
+import commonAPI from "./commonAPI";
+import ServerURL from "./ServerURL";
 
 // create add api - called bu UserInputs,when finish btn clicked
 export const addNewResumeAPI = async (resume)=>{
